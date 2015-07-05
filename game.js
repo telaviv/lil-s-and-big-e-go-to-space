@@ -18,8 +18,9 @@ Crafty.c('Block', {
         this.attr({x: x * BLOCK_WIDTH, y: y * BLOCK_HEIGHT});
     },
 
-    moveDown: function() {
-        this.y += BLOCK_HEIGHT;
+    movePosition: function(delta) {
+        this.x += delta.x * BLOCK_WIDTH;
+        this.y += delta.y * BLOCK_HEIGHT;
     },
 
     getPosition: function() {
@@ -56,10 +57,15 @@ Crafty.c('Board', {
     },
 
     updateState: function() {
+        this.shiftBlock({x: 0, y: 1});
+    },
+
+    shiftBlock: function(delta) {
         var position = this.block.getPosition();
         this.grid[position.x][position.y] = null;
-        this.block.moveDown();
-        this.grid[position.x][position.y + 1] = this.block;
+        this.block.movePosition({x: delta.x, y: delta.y});
+        position = this.block.getPosition();
+        this.grid[position.x][position.y] = this.block;
     }
 });
 
