@@ -33,27 +33,13 @@ Crafty.c('Board', {
         this.requires('2D, DOM, Color, Delay');
         this.attr({w: BOARD_WIDTH, h: BOARD_HEIGHT, x: 0, y: 0});
         this.color('green');
-        this.createEmptyGrid();
         this.appendBlock(0, 0);
         this.delay(this.updateState, 1000, 10);
-    },
-
-    createEmptyGrid: function() {
-        var rows = [];
-        for (var x = 0; x < BOARD_BLOCK_WIDTH; ++x) {
-            var column = [];
-            for (var y = 0; y < BOARD_BLOCK_HEIGHT; ++y) {
-                column.push(null);
-            }
-            rows.push(column);
-        }
-        this.grid = rows;
     },
 
     appendBlock: function(x, y) {
         this.block = Crafty.e('Block').attr({x: x, y: y}).color('#F00');
         this.attach(this.block);
-        this.grid[x][y] = this.block;
     },
 
     updateState: function() {
@@ -62,10 +48,7 @@ Crafty.c('Board', {
 
     shiftBlock: function(delta) {
         var position = this.block.getPosition();
-        this.grid[position.x][position.y] = null;
         this.block.movePosition({x: delta.x, y: delta.y});
-        position = this.block.getPosition();
-        this.grid[position.x][position.y] = this.block;
     }
 });
 
