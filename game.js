@@ -16,6 +16,7 @@ Crafty.c('Block', {
 
     create: function(x, y) {
         this.attr({x: x * BLOCK_WIDTH, y: y * BLOCK_HEIGHT});
+        return this;
     },
 
     movePosition: function(delta) {
@@ -32,12 +33,16 @@ Crafty.c('Blocks', {
     init: function() {
         this.requires('2D, DOM');
         this.attr({w: BOARD_WIDTH, h: BOARD_HEIGHT, x: 0, y: 0});
-        this.appendBlock(0, 0);
+        this.createNewBlock();
         this.blocks = [];
     },
 
+    createNewBlock: function() {
+        this.appendBlock(3, 0);
+    },
+
     appendBlock: function(x, y) {
-        this.block = Crafty.e('Block').attr({x: x, y: y}).color('#F00');
+        this.block = Crafty.e('Block').create(x, y).color('#F00');
         this.attach(this.block);
     },
 
@@ -49,7 +54,7 @@ Crafty.c('Blocks', {
 
     tick: function() {
         if (this.block === null) {
-            this.appendBlock(0, 0);
+            this.createNewBlock();
             return;
         }
 
@@ -101,7 +106,7 @@ Crafty.c('Board', {
         this.color('green');
         this.blocks = Crafty.e('Blocks');
         this.attach(this.blocks);
-        this.delay(this.blocks.tick.bind(this.blocks), 1000, 300);
+        this.delay(this.blocks.tick.bind(this.blocks), 800, 300);
         this.bind('KeyUp', this.handleKeyPress);
     },
 
@@ -113,10 +118,6 @@ Crafty.c('Board', {
         }
     }
 });
-
-
-
-
 
 
 var board = Crafty.e('Board');
