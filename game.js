@@ -34,7 +34,8 @@ Crafty.c('Board', {
         this.attr({w: BOARD_WIDTH, h: BOARD_HEIGHT, x: 0, y: 0});
         this.color('green');
         this.appendBlock(0, 0);
-        this.delay(this.updateState, 1000, 10);
+        this.blocks = [];
+        this.delay(this.updateState, 1000, -1);
         this.bind('KeyUp', this.handleKeyPress);
     },
 
@@ -45,6 +46,11 @@ Crafty.c('Board', {
 
     updateState: function() {
         this.shiftBlock({x: 0, y: 1});
+        var pos = this.block.getPosition();
+        if (pos.y === BOARD_BLOCK_HEIGHT - 1) {
+            this.blocks.push(this.block);
+            this.appendBlock(0, 0);
+        }
     },
 
     shiftBlock: function(delta) {
