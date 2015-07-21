@@ -42,21 +42,28 @@ Crafty.c('Blocks', {
     },
 
     shiftBlock: function(delta) {
+        if (this.block === null) return;
         var position = this.block.getPosition();
         this.block.movePosition({x: delta.x, y: delta.y});
     },
 
 
     tick: function() {
+        if (this.block === null) {
+            this.appendBlock(0, 0);
+            return;
+        }
+
         this.shiftBlock({x: 0, y: 1});
         var pos = this.block.getPosition();
         if (pos.y === BOARD_BLOCK_HEIGHT - 1) {
             this.blocks.push(this.block);
-            this.appendBlock(0, 0);
+            this.block = null;
         }
     },
 
     moveLeft: function() {
+        if (this.block === null) return;
         var pos = this.block.getPosition();
         if(pos.x !== 0) {
             this.block.movePosition({x: -1, y: 0});
@@ -64,6 +71,7 @@ Crafty.c('Blocks', {
     },
 
     moveRight: function() {
+        if (this.block === null) return;
         var pos = this.block.getPosition();
         if(pos.x !== BOARD_BLOCK_WIDTH - 1) {
             this.block.movePosition({x: 1, y: 0});
