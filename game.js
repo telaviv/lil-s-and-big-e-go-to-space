@@ -35,6 +35,7 @@ Crafty.c('Board', {
         this.color('green');
         this.appendBlock(0, 0);
         this.delay(this.updateState, 1000, 10);
+        this.bind('KeyUp', this.handleKeyPress);
     },
 
     appendBlock: function(x, y) {
@@ -49,9 +50,16 @@ Crafty.c('Board', {
     shiftBlock: function(delta) {
         var position = this.block.getPosition();
         this.block.movePosition({x: delta.x, y: delta.y});
+    },
+
+    handleKeyPress: function(e) {
+        var pos = this.block.getPosition();
+        if(e.key == Crafty.keys.LEFT_ARROW && pos.x !== 0) {
+            this.block.movePosition({x: -1, y: 0});
+        } else if (e.key == Crafty.keys.RIGHT_ARROW && pos.x !== BOARD_BLOCK_WIDTH - 1) {
+            this.block.movePosition({x: 1, y: 0});
+        }
     }
 });
-
-
 
 var board = Crafty.e('Board');
