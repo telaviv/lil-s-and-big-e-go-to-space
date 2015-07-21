@@ -47,7 +47,6 @@ Crafty.c('Blocks', {
         this.block.movePosition({x: delta.x, y: delta.y});
     },
 
-
     tick: function() {
         if (this.block === null) {
             this.appendBlock(0, 0);
@@ -56,7 +55,7 @@ Crafty.c('Blocks', {
 
         this.shiftBlock({x: 0, y: 1});
         var pos = this.block.getPosition();
-        if (pos.y === BOARD_BLOCK_HEIGHT - 1) {
+        if (pos.y === BOARD_BLOCK_HEIGHT - 1 || this.collidesWith(0, 1)) {
             this.blocks.push(this.block);
             this.block = null;
         }
@@ -65,7 +64,7 @@ Crafty.c('Blocks', {
     moveLeft: function() {
         if (this.block === null) return;
         var pos = this.block.getPosition();
-        if(pos.x !== 0) {
+        if(pos.x !== 0 && !this.collidesWith(-1, 0)) {
             this.block.movePosition({x: -1, y: 0});
         }
     },
@@ -73,9 +72,25 @@ Crafty.c('Blocks', {
     moveRight: function() {
         if (this.block === null) return;
         var pos = this.block.getPosition();
-        if(pos.x !== BOARD_BLOCK_WIDTH - 1) {
+        if(pos.x !== BOARD_BLOCK_WIDTH - 1 && !this.collidesWith(1, 0)) {
             this.block.movePosition({x: 1, y: 0});
         }
+    },
+
+    collidesWith: function(dx, dy) {
+        var pos = this.block.getPosition()
+        return this.hasBlockAt(pos.x + dx, pos.y + dy);
+    },
+
+    hasBlockAt: function(x, y) {
+        var hasBlock = false
+        this.blocks.forEach(function(block) {
+            var pos = block.getPosition()
+            if (pos.x === x && pos.y === y) {
+                hasBlock = true;
+            }
+        });
+        return hasBlock;
     },
 });
 
@@ -86,7 +101,7 @@ Crafty.c('Board', {
         this.color('green');
         this.blocks = Crafty.e('Blocks');
         this.attach(this.blocks);
-        this.delay(this.blocks.tick.bind(this.blocks), 1000, -1);
+        this.delay(this.blocks.tick.bind(this.blocks), 1000, 300);
         this.bind('KeyUp', this.handleKeyPress);
     },
 
