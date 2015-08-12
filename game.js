@@ -7,10 +7,11 @@ var BOARD_HEIGHT = BLOCK_HEIGHT * BOARD_BLOCK_HEIGHT;
 
 
 Crafty.init(BOARD_WIDTH, BOARD_HEIGHT, document.getElementById('game'));
+Crafty.sprite("tiles.png", {RedTile:[0, 0, 50, 50]});
 
 Crafty.c('Block', {
     init: function() {
-        this.requires('2D, DOM, Color');
+        this.requires('2D, DOM, RedTile');
         this.attr({w: BLOCK_WIDTH, h: BLOCK_HEIGHT})
     },
 
@@ -42,7 +43,7 @@ Crafty.c('Blocks', {
     },
 
     appendBlock: function(x, y) {
-        this.block = Crafty.e('Block').create(x, y).color('#F00');
+        this.block = Crafty.e('Block').create(x, y);
         this.attach(this.block);
     },
 
