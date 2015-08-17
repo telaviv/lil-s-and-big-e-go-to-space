@@ -4,6 +4,7 @@ var BOARD_BLOCK_WIDTH = 6;
 var BOARD_BLOCK_HEIGHT = 12;
 var BOARD_WIDTH = BLOCK_WIDTH * BOARD_BLOCK_WIDTH;
 var BOARD_HEIGHT = BLOCK_HEIGHT * BOARD_BLOCK_HEIGHT;
+var BLOCK_SPEED = 2 // pixels per second
 
 
 Crafty.init(BOARD_WIDTH, BOARD_HEIGHT, document.getElementById('game'));
@@ -53,13 +54,13 @@ Crafty.c('Blocks', {
         this.block.movePosition({x: delta.x, y: delta.y});
     },
 
-    tick: function() {
+    tick: function(frameData) {
         if (this.block === null) {
             this.createNewBlock();
             return;
         }
 
-        this.shiftBlock({x: 0, y: 1});
+        this.shiftBlock({x: 0, y: frameData.dt / 1000 * BLOCK_SPEED});
         var pos = this.block.getPosition();
         if (pos.y === BOARD_BLOCK_HEIGHT - 1 || this.collidesWith(0, 1)) {
             this.blocks.push(this.block);
@@ -107,8 +108,8 @@ Crafty.c('Board', {
         this.color('green');
         this.blocks = Crafty.e('Blocks');
         this.attach(this.blocks);
-        this.delay(this.blocks.tick.bind(this.blocks), 800, 300);
         this.bind('KeyUp', this.handleKeyPress);
+        this.bind('EnterFrame', this.blocks.tick.bind(this.blocks));
     },
 
     handleKeyPress: function(e) {
