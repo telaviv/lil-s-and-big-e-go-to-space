@@ -1,3 +1,5 @@
+"use strict";
+
 var BLOCK_WIDTH = 50;
 var BLOCK_HEIGHT = 50;
 var BOARD_BLOCK_WIDTH = 6;
@@ -28,6 +30,13 @@ Crafty.c('Block', {
 
     getPosition: function() {
         return {x: this.x / BLOCK_WIDTH, y: this.y / BLOCK_HEIGHT};
+    },
+
+    willCollideWith: function(block, dx, dy) {
+        return this.x + dx < block.x + BLOCK_WIDTH &&
+            this.x + dx + BLOCK_WIDTH > block.x &&
+            this.y + dy < block.y + BLOCK_HEIGHT &&
+            this.y + dy + BLOCK_HEIGHT > block.y;
     }
 });
 
@@ -62,7 +71,7 @@ Crafty.c('Blocks', {
 
         this.shiftBlock({x: 0, y: frameData.dt / 1000 * BLOCK_SPEED});
         var pos = this.block.getPosition();
-        if (pos.y === BOARD_BLOCK_HEIGHT - 1 || this.collidesWith(0, 1)) {
+        if (pos.y >= BOARD_BLOCK_HEIGHT - 1 || this.collidesWith(0, 1)) {
             this.blocks.push(this.block);
             this.block = null;
         }
@@ -85,8 +94,12 @@ Crafty.c('Blocks', {
     },
 
     collidesWith: function(dx, dy) {
-        var pos = this.block.getPosition()
-        return this.hasBlockAt(pos.x + dx, pos.y + dy);
+        for (let block of this.blocks) {
+            if (this.block.willCollideWith(block, dx, dy)) {
+                return true
+            }
+        }
+        return false;
     },
 
     hasBlockAt: function(x, y) {
