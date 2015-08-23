@@ -121,7 +121,7 @@ Crafty.c('Board', {
         this.color('green');
         this.blocks = Crafty.e('Blocks');
         this.attach(this.blocks);
-        this.bind('KeyUp', this.handleKeyPress);
+        this.bind('KeyDown', this.handleKeyPress);
         this.bind('EnterFrame', this.blocks.tick.bind(this.blocks));
     },
 
