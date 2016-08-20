@@ -24,10 +24,15 @@ Crafty.c('Block', {
     return this;
   },
 
+  moveLeft: function() {
+    this.x -= BLOCK_WIDTH;
+  },
+
   _onHit: function() {
     this.vy = 0;
     this.y = Math.round(this.y / BLOCK_HEIGHT) * BLOCK_HEIGHT;
   },
+
 });
 
 Crafty.c('Floor', {
@@ -39,12 +44,20 @@ Crafty.c('Floor', {
 
 Crafty.c('Board', {
   init: function() {
-    this.requires('2D, Canvas, Color, Collision');
+    this.requires('2D, Canvas, Color, Keyboard');
     this.attr({w: BOARD_WIDTH, h: BOARD_HEIGHT, x: 0, y: 0});
     this.color('green');
     this.block = Crafty.e('Block').create(3, 0);
     this.attach(this.block);
+
+    this.bind('KeyDown', this._onKeyDown.bind(this));
   },
+
+  _onKeyDown: function(e) {
+    if (e.key == Crafty.keys.LEFT_ARROW) {
+      this.block.moveLeft();
+    }
+  }
 });
 
 var board = Crafty.e('Board');
