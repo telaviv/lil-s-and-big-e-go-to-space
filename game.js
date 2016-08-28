@@ -2,8 +2,8 @@
 
 var BLOCK_WIDTH = 25;
 var BLOCK_HEIGHT = BLOCK_WIDTH;
-var BOARD_BLOCK_WIDTH = 25;
-var BOARD_BLOCK_HEIGHT = 15;
+var BOARD_BLOCK_WIDTH = 22;
+var BOARD_BLOCK_HEIGHT = 12;
 var BOARD_WIDTH = BLOCK_WIDTH * BOARD_BLOCK_WIDTH;
 var BOARD_HEIGHT = BLOCK_HEIGHT * BOARD_BLOCK_HEIGHT;
 var BLOCK_SPEED = BLOCK_HEIGHT // pixels per second
@@ -98,7 +98,7 @@ Crafty.c('Water', {
 })
 
 
-Crafty.c('Board', {
+Crafty.c('Nursery', {
   init: function() {
     this.requires('2D, Canvas, Color, Keyboard');
     this.attr({
@@ -133,4 +133,14 @@ Crafty.c('Board', {
 
 });
 
-var board = Crafty.e('Board');
+Crafty.c('Game', {
+  init: function() {
+    this.requires('2D, Canvas, Color');
+    this.attr({x: 0, y: 0, w: BOARD_WIDTH, h: BOARD_HEIGHT});
+    this.color('black');
+    this.board = Crafty.e('Nursery');
+    this.attach(this.board);
+  }
+});
+
+Crafty.e('Game');
