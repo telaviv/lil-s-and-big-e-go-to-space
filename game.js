@@ -1,6 +1,6 @@
 "use strict";
 
-var BLOCK_WIDTH = 25;
+var BLOCK_WIDTH = 50;
 var BLOCK_HEIGHT = BLOCK_WIDTH;
 var BOARD_BLOCK_WIDTH = 22;
 var BOARD_BLOCK_HEIGHT = 12;
@@ -10,10 +10,8 @@ var BLOCK_SPEED = BLOCK_HEIGHT // pixels per second
 
 
 Crafty.init(BOARD_WIDTH, BOARD_HEIGHT, document.getElementById('game'));
-Crafty.sprite("tiles.png", {
-    PlayerSprite: [5 * BLOCK_WIDTH, 0, BLOCK_WIDTH, BLOCK_HEIGHT],
-    PlantSprite: [0, 0, BLOCK_WIDTH, BLOCK_HEIGHT],
-});
+Crafty.sprite('flower_baby.png', {PlantSprite: [0, 0, BLOCK_WIDTH, BLOCK_HEIGHT]});
+Crafty.sprite('sprite_front_001.png', {PlayerSprite: [0, 0, BLOCK_WIDTH, BLOCK_HEIGHT * 2]});
 
 Crafty.c('KeyboardMovement', {
   init: function() {
@@ -50,14 +48,14 @@ Crafty.c('KeyboardMovement', {
   },
 
   moveUp: function() {
-    if (this.y !== this.bb.y) {
-      this.y -= this.h;
+    if (this.y !== this.bb.y - BLOCK_HEIGHT) {
+      this.y -= BLOCK_HEIGHT;
     }
   },
 
   moveDown: function() {
-    if (this.y !== this.bb.h + this.bb.y - this.h) {
-      this.y += this.h;
+    if (this.y !== this.bb.h + this.bb.y - 2 * BLOCK_HEIGHT) {
+      this.y += BLOCK_HEIGHT;
     }
   },
 });
@@ -118,7 +116,7 @@ Crafty.c('Nursery', {
   },
 
   _spawnPlayer: function() {
-    this.player = Crafty.e('Player').create(9, 6);
+    this.player = Crafty.e('Player').create(9, 5);
     this.player.shift(this.x, this.y);
     this.player.bb = this;
     this.attach(this.player);
