@@ -18,6 +18,10 @@ Crafty.sprite("tiles.png", {
 Crafty.c('KeyboardMovement', {
   init: function() {
     this.requires('Keyboard');
+    this.bind('NarrationEnded', this.bindToKeyPresses.bind(this));
+  },
+
+  bindToKeyPresses: function() {
     this.bind('KeyDown', this._onKeyDown.bind(this));
   },
 
@@ -134,7 +138,7 @@ Crafty.c('Nursery', {
 
 Crafty.c('Narration', {
   init: function() {
-    this.requires('2D, DOM, Color');
+    this.requires('2D, DOM, Color, Keyboard');
     this.attr({
       x: BLOCK_WIDTH,
       y: BOARD_HEIGHT - (4 * BLOCK_WIDTH),
@@ -148,7 +152,6 @@ Crafty.c('Narration', {
       'justify-content': 'center',
     });
     this.color('white');
-    this.showText('Cats');
   },
 
   showText: function(text) {
@@ -158,6 +161,13 @@ Crafty.c('Narration', {
     div.appendChild(textNode);
     this._element.innerHTML = '';
     this._element.appendChild(div);
+    this.bind('KeyDown', this._onKeyDown.bind(this));
+  },
+
+  _onKeyDown: function(e) {
+    this.undraw();
+    this.unbind('KeyDown');
+    Crafty.trigger('NarrationEnded');
   },
 });
 
@@ -168,6 +178,7 @@ Crafty.c('Game', {
     this.color('black');
     this.board = Crafty.e('Nursery');
     this.narration = Crafty.e('Narration');
+    this.narration.showText('.....');
   }
 });
 
