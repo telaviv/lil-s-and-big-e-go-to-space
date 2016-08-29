@@ -130,7 +130,35 @@ Crafty.c('Nursery', {
     var water = Crafty.e('Water').create(0, 0);
     water.shift(this.x, this.y);
   },
+});
 
+Crafty.c('Narration', {
+  init: function() {
+    this.requires('2D, DOM, Color');
+    this.attr({
+      x: BLOCK_WIDTH,
+      y: BOARD_HEIGHT - (4 * BLOCK_WIDTH),
+      w: BOARD_WIDTH - 2 * BLOCK_WIDTH - 6,
+      h: 3 * BLOCK_WIDTH,
+    });
+    this.css({
+      display: 'flex',
+      border: 'medium solid grey',
+      'align-items': 'center',
+      'justify-content': 'center',
+    });
+    this.color('white');
+    this.showText('Cats');
+  },
+
+  showText: function(text) {
+    var div = document.createElement('div');
+    div.style.maxWidth = '80%';
+    var textNode = document.createTextNode(text);
+    div.appendChild(textNode);
+    this._element.innerHTML = '';
+    this._element.appendChild(div);
+  },
 });
 
 Crafty.c('Game', {
@@ -139,8 +167,8 @@ Crafty.c('Game', {
     this.attr({x: 0, y: 0, w: BOARD_WIDTH, h: BOARD_HEIGHT});
     this.color('black');
     this.board = Crafty.e('Nursery');
-    this.attach(this.board);
+    this.narration = Crafty.e('Narration');
   }
 });
 
-Crafty.e('Game');
+var game = Crafty.e('Game');
